@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#12343b" />
+    <title>Cannon Street Line</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient">
+      <div class="grain"></div>
+      <div class="glow glow-one"></div>
+      <div class="glow glow-two"></div>
+    </div>
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Live departures</p>
+          <h1>Cannon Street Line</h1>
+          <p class="subtitle">Eltham + London Cannon Street, two-way view.</p>
+        </div>
+        <div class="meta">
+          <div class="meta-block">
+            <span class="label">Updated</span>
+            <span id="last-updated">--</span>
+          </div>
+          <button class="ghost" id="refresh">Refresh</button>
+        </div>
+      </header>
+
+      <section class="tabs" role="tablist" aria-label="Routes">
+        <button
+          class="tab active"
+          data-route="outbound"
+          role="tab"
+          aria-selected="true"
+        >
+          From Eltham
+        </button>
+        <button
+          class="tab"
+          data-route="inbound"
+          role="tab"
+          aria-selected="false"
+        >
+          From Cannon Street
+        </button>
+      </section>
+
+      <section class="route">
+        <div>
+          <p class="route-label" id="route-label">Eltham to London Cannon Street</p>
+          <p class="route-note" id="route-note">
+            Direct and loop services shown. Loop marked when long duration or many stops.
+          </p>
+        </div>
+        <div class="pill" id="route-pill">ELW → CST</div>
+      </section>
+
+      <section class="alerts" id="alerts" hidden></section>
+
+      <section class="content">
+        <div class="state" id="state">Loading departures…</div>
+        <div class="list" id="departures" aria-live="polite"></div>
+      </section>
+    </main>
+  </body>
+</html>
