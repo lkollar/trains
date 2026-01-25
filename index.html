@@ -69,11 +69,14 @@
       window.__deferredInit = function() {
         if (window.__deferredDone) return;
         window.__deferredDone = true;
-        // Inject ambient effects (not in initial DOM to avoid CSS parse cost)
-        var ambient = document.createElement('div');
-        ambient.className = 'ambient';
-        ambient.innerHTML = '<div class="grain"></div><div class="glow glow-one"></div><div class="glow glow-two"></div>';
-        document.body.insertBefore(ambient, document.body.firstChild);
+        // Skip ambient effects on touch devices (blur kills mobile GPU)
+        var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        if (!isTouch) {
+          var ambient = document.createElement('div');
+          ambient.className = 'ambient';
+          ambient.innerHTML = '<div class="grain"></div><div class="glow glow-one"></div><div class="glow glow-two"></div>';
+          document.body.insertBefore(ambient, document.body.firstChild);
+        }
         // Load fonts
         var link = document.createElement('link');
         link.rel = 'stylesheet';

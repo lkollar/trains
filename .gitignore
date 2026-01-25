@@ -1,3 +1,4 @@
 .vite/
 *.har
 *.json.bak
+*-recording.json
