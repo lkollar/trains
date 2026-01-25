@@ -174,6 +174,8 @@ const refresh = async () => {
     renderAlerts(payload);
     renderServices(payload.data || []);
     elements.lastUpdated.textContent = formatTimestamp(new Date());
+    // Show ambient effects and load fonts only after first successful render
+    if (window.__deferredInit) window.__deferredInit();
   } catch (error) {
     elements.state.textContent = "Unable to load departures.";
     elements.departures.innerHTML = "";
