@@ -11,11 +11,7 @@
     <script src="app.js" defer></script>
   </head>
   <body>
-    <div class="ambient" id="ambient" hidden>
-      <div class="grain"></div>
-      <div class="glow glow-one"></div>
-      <div class="glow glow-two"></div>
-    </div>
+
     <main class="app">
       <header class="hero">
         <div>
@@ -73,14 +69,20 @@
       window.__deferredInit = function() {
         if (window.__deferredDone) return;
         window.__deferredDone = true;
-        // Show ambient effects (blur/grain)
-        var ambient = document.getElementById('ambient');
-        if (ambient) ambient.hidden = false;
+        // Inject ambient effects (not in initial DOM to avoid CSS parse cost)
+        var ambient = document.createElement('div');
+        ambient.className = 'ambient';
+        ambient.innerHTML = '<div class="grain"></div><div class="glow glow-one"></div><div class="glow glow-two"></div>';
+        document.body.insertBefore(ambient, document.body.firstChild);
         // Load fonts
         var link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Work+Sans:wght@400;500;600&display=swap';
         document.head.appendChild(link);
+        // Register service worker after first render
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('sw.js');
+        }
       };
     </script>
   </body>

@@ -201,10 +201,6 @@ const init = () => {
   elements.refresh.addEventListener("click", refresh);
   refresh();
   scheduleRefresh();
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-  }
 };
 
 init();
