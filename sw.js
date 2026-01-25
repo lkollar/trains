@@ -1,4 +1,4 @@
-const CACHE_NAME = "cannon-line-v6";
+const CACHE_NAME = "cannon-line-v7";
 const ASSETS = ["/", "index.html", "styles.css", "app.js", "manifest.json", "icon.svg"];
 
 self.addEventListener("install", (event) => {

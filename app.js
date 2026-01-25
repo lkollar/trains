@@ -1,6 +1,8 @@
 const BASE_URL =
   "https://departureboard-io-api-mj7fisk44q-nw.a.run.app/api/v1.0";
 
+console.log("[app] script loaded at", performance.now().toFixed(0), "ms");
+
 const ROUTES = {
   outbound: {
     from: "ELW",
@@ -146,11 +148,17 @@ const renderServices = (services) => {
 const fetchDepartures = async (routeKey) => {
   const route = ROUTES[routeKey];
   const url = `${BASE_URL}/getFormattedJourneyByCRS?sourceCRS=${route.from}&destCRS=${route.to}`;
+  console.log("[fetch] starting request to", url);
+  const t0 = performance.now();
   const response = await fetch(url, { cache: "no-store" });
+  console.log(`[fetch] response received in ${(performance.now() - t0).toFixed(0)}ms, status=${response.status}`);
   if (!response.ok) {
     throw new Error(`Network ${response.status}`);
   }
-  return response.json();
+  const t1 = performance.now();
+  const data = await response.json();
+  console.log(`[fetch] json parsed in ${(performance.now() - t1).toFixed(0)}ms`);
+  return data;
 };
 
 const setRoute = (routeKey) => {
@@ -168,15 +176,24 @@ const setRoute = (routeKey) => {
 };
 
 const refresh = async () => {
+  const t0 = performance.now();
+  const log = (msg) => console.log(`[${(performance.now() - t0).toFixed(0)}ms] ${msg}`);
   try {
+    log("refresh start");
     elements.state.textContent = "Loading departures…";
+    log("before fetch");
     const payload = await fetchDepartures(activeRoute);
+    log("after fetch");
     renderAlerts(payload);
+    log("after renderAlerts");
     renderServices(payload.data || []);
+    log("after renderServices");
     elements.lastUpdated.textContent = formatTimestamp(new Date());
     // Show ambient effects and load fonts only after first successful render
     if (window.__deferredInit) window.__deferredInit();
+    log("done");
   } catch (error) {
+    log("error: " + error.message);
     elements.state.textContent = "Unable to load departures.";
     elements.departures.innerHTML = "";
   }
