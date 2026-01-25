@@ -1,7 +1,8 @@
 {
   "name": "Cannon Street Line",
   "short_name": "Cannon Line",
-  "start_url": "/",
+  "start_url": "/trains/",
+  "scope": "/trains/",
   "display": "standalone",
   "background_color": "#f3f2ee",
   "theme_color": "#12343b",
