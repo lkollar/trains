@@ -3,6 +3,33 @@ const BASE_URL =
 
 console.log("[app] script loaded at", performance.now().toFixed(0), "ms");
 
+// Log paint timing
+if (window.PerformanceObserver) {
+  const po = new PerformanceObserver((list) => {
+    list.getEntries().forEach((e) => {
+      console.log(`[paint] ${e.name}: ${e.startTime.toFixed(0)}ms`);
+    });
+  });
+  po.observe({ type: "paint", buffered: true });
+}
+
+// Log resource timing summary
+window.addEventListener("load", () => {
+  const resources = performance.getEntriesByType("resource");
+  resources.forEach((r) => {
+    const name = r.name.split("/").pop().substring(0, 25);
+    console.log(`[res] ${name}: ${r.duration.toFixed(0)}ms (start ${r.startTime.toFixed(0)})`);
+  });
+  const nav = performance.getEntriesByType("navigation")[0];
+  if (nav) {
+    console.log(`[nav] DNS: ${(nav.domainLookupEnd - nav.domainLookupStart).toFixed(0)}ms`);
+    console.log(`[nav] TLS: ${(nav.connectEnd - nav.secureConnectionStart).toFixed(0)}ms`);
+    console.log(`[nav] TTFB: ${nav.responseStart.toFixed(0)}ms`);
+    console.log(`[nav] DOM Interactive: ${nav.domInteractive.toFixed(0)}ms`);
+    console.log(`[nav] DOM Complete: ${nav.domComplete.toFixed(0)}ms`);
+  }
+});
+
 const ROUTES = {
   outbound: {
     from: "ELW",
