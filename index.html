@@ -24,24 +24,32 @@
             <span class="label">Updated</span>
             <span id="last-updated">--</span>
           </div>
-          <button class="ghost" id="refresh">Refresh</button>
+          <button class="ghost" id="refresh" type="button" aria-label="Refresh departures">
+            Refresh departures
+          </button>
         </div>
       </header>
 
       <section class="tabs" role="tablist" aria-label="Routes">
         <button
+          id="route-outbound"
           class="tab active"
           data-route="outbound"
           role="tab"
           aria-selected="true"
+          aria-controls="departures-panel"
+          tabindex="0"
         >
           From Eltham
         </button>
         <button
+          id="route-inbound"
           class="tab"
           data-route="inbound"
           role="tab"
           aria-selected="false"
+          aria-controls="departures-panel"
+          tabindex="-1"
         >
           From Cannon Street
         </button>
@@ -59,7 +67,13 @@
 
       <section class="alerts" id="alerts" hidden></section>
 
-      <section class="content">
+      <section
+        class="content"
+        id="departures-panel"
+        role="tabpanel"
+        aria-labelledby="route-outbound"
+        aria-busy="true"
+      >
         <div class="state" id="state">Loading departures…</div>
         <div class="list" id="departures" aria-live="polite"></div>
       </section>
@@ -74,17 +88,23 @@
         if (!isTouch) {
           var ambient = document.createElement('div');
           ambient.className = 'ambient';
-          ambient.innerHTML = '<div class="grain"></div><div class="glow glow-one"></div><div class="glow glow-two"></div>';
+          ambient.innerHTML =
+            '<div class="grain"></div>' +
+            '<div class="glow glow-one"></div>' +
+            '<div class="glow glow-two"></div>';
           document.body.insertBefore(ambient, document.body.firstChild);
         }
         // Load fonts
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Work+Sans:wght@400;500;600&display=swap';
+        link.href =
+          'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&' +
+          'family=Work+Sans:wght@400;500;600&display=swap';
         document.head.appendChild(link);
-        // Register service worker after first render
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js');
+        // Vite transforms CSS for development; its responses must not enter the PWA cache.
+        var isLocal = ['localhost', '127.0.0.1', '::1'].indexOf(location.hostname) >= 0;
+        if ('serviceWorker' in navigator && !isLocal) {
+          navigator.serviceWorker.register('sw.js').catch(function() {});
         }
       };
     </script>
