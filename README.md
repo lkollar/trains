@@ -12,11 +12,9 @@ Uses departureboard.io public API:
 ## Run locally
 
 ```bash
-python3 -m http.server
+npm install
+npm run dev
 ```
 
-Open `http://localhost:8000`.
-
-## Deploy
-
-Serve the repo root on `trains.kollar.me` over HTTPS for PWA install.
+Open the local URL Vite prints. Run the install command only on first setup or
+after dependencies change.

@@ -1,0 +1,10 @@
+{
+  "name": "cannon-street-line",
+  "private": true,
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "^8.2.2"
+  }
+}
