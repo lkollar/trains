@@ -1,22 +1,26 @@
 # Repo Guide for Agents
 
-This repo is a static PWA. No build system, no package manager, no tests.
-Files are plain HTML/CSS/JS at repo root.
+This repo is a static PWA with Vite as its development server. There is no
+production build pipeline or test runner. Files are plain HTML/CSS/JS at repo
+root.
 
 ## Commands
 
 ### Run locally
-- `python3 -m http.server`
-- Open `http://localhost:8000`
+- First setup: `npm install`
+- Start: `npm run dev`
+- Open the local URL Vite prints; default is `http://localhost:5173`
 
 ### Build
-- None. Static files only.
+- None configured. Deploy the static source files.
 
 ### Lint
 - None configured.
 
 ### Tests
-- None configured.
+- Syntax: `node --check app.js && node --check sw.js`
+- Patch hygiene: `git diff --check`
+- No test runner configured.
 
 ### Single test
 - Not applicable (no test runner).
@@ -28,6 +32,8 @@ Files are plain HTML/CSS/JS at repo root.
 - `manifest.json`: PWA manifest
 - `sw.js`: service worker
 - `icon.svg`: PWA icon
+- `package.json`: Vite development command
+- `package-lock.json`: locked development dependencies
 - `README.md`: usage notes
 
 ## Data source
@@ -41,6 +47,8 @@ Files are plain HTML/CSS/JS at repo root.
 - Route tabs: Eltham → Cannon Street and reverse
 - Alerts: `alert_messages` rendered when present
 - Loop badge: duration > 45 minutes OR stops > 12
+- Platform: prominent station-board block; hidden value shown as `tbd`
+- Revised departure times shown as `Expected HH:MM`
 
 ## HTML style
 - Keep semantic tags (`main`, `header`, `section`, `article`).
@@ -56,10 +64,11 @@ Files are plain HTML/CSS/JS at repo root.
 - Avoid heavy layout frameworks; use flex/grid.
 
 ## JS style
-- Plain ES6, no build step.
+- Plain ES6, no production build step.
 - Use `const` by default; `let` only when needed.
 - Keep functions small and pure when possible.
 - Use template literals for HTML rendering.
+- Escape all API-provided values before inserting them via `innerHTML`.
 - Handle network errors with try/catch; fail gracefully.
 - Keep timers in module scope and clear when rescheduling.
 - Avoid global leaks; file is module-like but loaded as script.
@@ -71,7 +80,8 @@ Files are plain HTML/CSS/JS at repo root.
 - CSS classes: kebab-case (`service-card`).
 
 ## Imports
-- None; do not add bundlers.
+- None. Vite serves source files directly during development.
+- Do not add a framework or production bundling pipeline unless requested.
 - External assets via CDN only if needed.
 
 ## Formatting
@@ -93,6 +103,8 @@ Files are plain HTML/CSS/JS at repo root.
 - Keep cached asset list in `sw.js` in sync with files.
 - Avoid caching API responses; use `no-store` fetch.
 - Ensure `manifest.json` stays in root.
+- Do not register the service worker on localhost. Vite can return transformed
+  JavaScript for cache requests to CSS paths, causing strict MIME failures.
 
 ## Deployment
 - GitHub Pages serving root of repo.
@@ -113,6 +125,7 @@ Files are plain HTML/CSS/JS at repo root.
 - Platform may be hidden; display "Platform tbd".
 - `departureDue` can be "On time" or time string.
 - `alert_messages` may be string or array.
+- Abort superseded fetches so rapid route changes cannot render stale results.
 
 ## If you add new files
 - Keep at repo root.
