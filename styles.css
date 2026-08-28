@@ -409,7 +409,17 @@ h1 {
   }
 
   .journey-meta {
+    grid-template-columns: max-content minmax(0, 1fr);
     gap: 8px;
+  }
+
+  .journey-meta > div:not(:first-child) {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .journey-meta .platform-block {
+    grid-row: 1 / span 2;
   }
 }
 
