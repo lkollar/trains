@@ -178,7 +178,10 @@ const renderServices = (services, routeKey) => {
       const platform = isTrue(service.platformHidden)
         ? "tbd"
         : displayValue(service.departingPlatform, "tbd");
-      const serviceDestination = displayValue(service.destFullName, destination);
+      const serviceDestination = displayValue(
+        service.trainTerminates,
+        displayValue(service.destFullName, destination)
+      );
       const serviceStatus = status(service);
       const reason = reasonText(service);
       const badges = [
